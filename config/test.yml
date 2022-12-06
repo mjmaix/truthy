@@ -1,2 +1,5 @@
 jwt:
   secret: 'example@123'
+
+app:
+  stage: 'test'

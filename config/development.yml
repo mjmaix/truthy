@@ -2,9 +2,13 @@ db:
   host: 'localhost'
   type: 'postgres'
   port: 5432
+  database: 'truthy'
   username: 'postgres'
   password: 'root'
   synchronize: false
 
 jwt:
   secret: 'example@123'
+
+app:
+  stage: 'development'

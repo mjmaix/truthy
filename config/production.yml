@@ -20,6 +20,7 @@ app:
   description: 'Official Truthy API'
   appUrl: 'https://truthy-backend.herokuapp.com/'
   frontendUrl: 'http://localhost:3000'
+  stage: 'production'
 
 mail:
   host: ''

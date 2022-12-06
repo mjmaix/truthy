@@ -24,6 +24,7 @@ app:
   appUrl: 'http://localhost:7777'
   frontendUrl: 'http://localhost:3000'
   sameSite: true
+  stage: 'development'
 
 mail:
   host: 'smtp.mailtrap.io'
@@ -64,4 +65,3 @@ winston:
   awsAccessKeyId: ''
   awsSecretAccessKey: ''
   awsRegion: ''
-  
