@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  truthy-postgres-dev:
+    container_name: truthy-postgres-dev
+    image: postgres:latest
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: truthy
+      # PG_DATA: /var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - truthy-pgdata-dev:/var/lib/postgresql/data
+
+  truthy-redis-dev:
+    image: 'redis:alpine'
+    container_name: truthy-redis-dev
+    restart: always
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+    volumes:
+      - .:/data
+    env_file:
+      - .env
+    ports:
+      - ${REDIS_PORT}:6379
+
+volumes:
+  truthy-pgdata-dev:
