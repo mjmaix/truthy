@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
-export class addTokenValidityDateInUserEntity1617559216655
-  implements MigrationInterface
-{
+export class addTokenValidityDateInUserEntity1617559216655 implements MigrationInterface {
   tableName = 'user';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -11,8 +9,8 @@ export class addTokenValidityDateInUserEntity1617559216655
       new TableColumn({
         name: 'tokenValidityDate',
         type: 'timestamp',
-        default: 'now()'
-      })
+        default: 'now()',
+      }),
     );
   }
 
@@ -22,8 +20,8 @@ export class addTokenValidityDateInUserEntity1617559216655
       new TableColumn({
         name: 'tokenValidityDate',
         type: 'timestamp',
-        default: 'now()'
-      })
+        default: 'now()',
+      }),
     );
   }
 }

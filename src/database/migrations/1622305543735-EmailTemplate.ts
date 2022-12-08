@@ -14,72 +14,70 @@ export class EmailTemplate1622305543735 implements MigrationInterface {
             type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: 'increment'
+            generationStrategy: 'increment',
           },
           {
             name: 'title',
             type: 'varchar',
             isNullable: false,
             isUnique: true,
-            length: '200'
+            length: '200',
           },
           {
             name: 'slug',
             type: 'varchar',
             isNullable: false,
             isUnique: true,
-            length: '200'
+            length: '200',
           },
           {
             name: 'sender',
             type: 'varchar',
             isNullable: false,
-            length: '200'
+            length: '200',
           },
           {
             name: 'subject',
             type: 'text',
-            isNullable: true
+            isNullable: true,
           },
           {
             name: 'body',
             type: 'text',
-            isNullable: true
+            isNullable: true,
           },
           {
             name: 'isDefault',
             type: 'boolean',
-            default: false
+            default: false,
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'now()'
+            default: 'now()',
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
-            default: 'now()'
-          }
-        ]
+            default: 'now()',
+          },
+        ],
       }),
-      false
+      false,
     );
 
     await queryRunner.createIndex(
       this.tableName,
       new TableIndex({
         name: `${this.index}`,
-        columnNames: ['title']
-      })
+        columnNames: ['title'],
+      }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     const table = await queryRunner.getTable(this.tableName);
-    const nameIndex = table.indices.find(
-      (ik) => ik.name.indexOf(this.index) !== -1
-    );
+    const nameIndex = table.indices.find((ik) => ik.name.indexOf(this.index) !== -1);
     if (nameIndex) {
       await queryRunner.dropIndex(this.tableName, nameIndex);
     }

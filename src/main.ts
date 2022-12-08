@@ -1,16 +1,11 @@
-import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import * as config from 'config';
-import helmet from 'helmet';
-import {
-  DocumentBuilder,
-  SwaggerCustomOptions,
-  SwaggerModule
-} from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-
 import { AppModule } from 'src/app.module';
 
 async function bootstrap() {
@@ -25,7 +20,7 @@ async function bootstrap() {
     app.enableCors({
       origin: true,
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-      credentials: true
+      credentials: true,
     });
     const swaggerConfig = new DocumentBuilder()
       .setTitle(apiConfig.name)
@@ -35,9 +30,9 @@ async function bootstrap() {
       .build();
     const customOptions: SwaggerCustomOptions = {
       swaggerOptions: {
-        persistAuthorization: true
+        persistAuthorization: true,
       },
-      customSiteTitle: apiConfig.description
+      customSiteTitle: apiConfig.description,
     };
     const document = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup('api-docs', app, document, customOptions);
@@ -51,18 +46,18 @@ async function bootstrap() {
           callback(new Error('Not allowed by CORS'));
         }
       },
-      credentials: true
+      credentials: true,
     });
   }
   useContainer(app.select(AppModule), {
-    fallbackOnErrors: true
+    fallbackOnErrors: true,
   });
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       whitelist: true,
-      forbidNonWhitelisted: true
-    })
+      forbidNonWhitelisted: true,
+    }),
   );
 
   app.use(cookieParser());

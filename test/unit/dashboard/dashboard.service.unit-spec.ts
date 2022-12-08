@@ -4,7 +4,7 @@ import { DashboardService } from 'src/dashboard/dashboard.service';
 
 const authServiceMock = () => ({
   countByCondition: jest.fn(),
-  getRefreshTokenGroupedData: jest.fn()
+  getRefreshTokenGroupedData: jest.fn(),
 });
 
 describe('DashboardService', () => {
@@ -16,9 +16,9 @@ describe('DashboardService', () => {
         DashboardService,
         {
           provide: AuthService,
-          useFactory: authServiceMock
-        }
-      ]
+          useFactory: authServiceMock,
+        },
+      ],
     }).compile();
 
     service = module.get<DashboardService>(DashboardService);
@@ -34,9 +34,7 @@ describe('DashboardService', () => {
   it('should get browser Stat', () => {
     service.getBrowserData();
     expect(authService.getRefreshTokenGroupedData).toHaveBeenCalledTimes(1);
-    expect(authService.getRefreshTokenGroupedData).toHaveBeenCalledWith(
-      'browser'
-    );
+    expect(authService.getRefreshTokenGroupedData).toHaveBeenCalledWith('browser');
   });
 
   it('should get os Stat', () => {

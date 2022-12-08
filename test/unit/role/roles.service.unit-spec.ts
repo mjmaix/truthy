@@ -1,14 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { UnprocessableEntityException } from '@nestjs/common';
-
-import { RolesService } from 'src/role/roles.service';
-import { RoleRepository } from 'src/role/role.repository';
-import { RoleFilterDto } from 'src/role/dto/role-filter.dto';
-import { CreateRoleDto } from 'src/role/dto/create-role.dto';
-import { NotFoundException } from 'src/exception/not-found.exception';
-import { UpdateRoleDto } from 'src/role/dto/update-role.dto';
-import { PermissionsService } from 'src/permission/permissions.service';
+import { Test, TestingModule } from '@nestjs/testing';
 import { MethodList } from 'src/config/permission-config';
+import { NotFoundException } from 'src/exception/not-found.exception';
+import { PermissionsService } from 'src/permission/permissions.service';
+import { CreateRoleDto } from 'src/role/dto/create-role.dto';
+import { RoleFilterDto } from 'src/role/dto/role-filter.dto';
+import { UpdateRoleDto } from 'src/role/dto/update-role.dto';
+import { RoleRepository } from 'src/role/role.repository';
+import { RolesService } from 'src/role/roles.service';
 
 const roleRepositoryMock = () => ({
   findAll: jest.fn(),
@@ -21,19 +20,19 @@ const roleRepositoryMock = () => ({
   findOne: jest.fn(),
   store: jest.fn(),
   updateItem: jest.fn(),
-  updateEntity: jest.fn()
+  updateEntity: jest.fn(),
 });
 
 const permissionServiceMock = () => ({
   findAll: jest.fn(),
-  whereInIds: jest.fn()
+  whereInIds: jest.fn(),
 });
 
 const mockPermission = {
   description: 'example test description',
   path: '/tests',
   method: MethodList.POST,
-  resource: 'test'
+  resource: 'test',
 };
 
 const mockRole = {
@@ -41,7 +40,7 @@ const mockRole = {
   description: 'test description',
   permissions: [1],
   name: 'test',
-  save: jest.fn()
+  save: jest.fn(),
 };
 
 describe('RolesService', () => {
@@ -52,13 +51,13 @@ describe('RolesService', () => {
         RolesService,
         {
           provide: RoleRepository,
-          useFactory: roleRepositoryMock
+          useFactory: roleRepositoryMock,
         },
         {
           provide: PermissionsService,
-          useFactory: permissionServiceMock
-        }
-      ]
+          useFactory: permissionServiceMock,
+        },
+      ],
     }).compile();
 
     service = module.get<RolesService>(RolesService);
@@ -75,7 +74,7 @@ describe('RolesService', () => {
     const roleFilterDto: RoleFilterDto = {
       keywords: 'example',
       limit: 10,
-      page: 1
+      page: 1,
     };
     roleRepository.paginate.mockResolvedValue('result');
     const result = await service.findAll(roleFilterDto);
@@ -89,9 +88,7 @@ describe('RolesService', () => {
     service.getPermissionByIds = jest.fn().mockResolvedValue([mockPermission]);
     const result = await service.create(createRoleDto);
     expect(service.getPermissionByIds).toHaveBeenCalledWith([1]);
-    expect(roleRepository.store).toHaveBeenCalledWith(createRoleDto, [
-      mockPermission
-    ]);
+    expect(roleRepository.store).toHaveBeenCalledWith(createRoleDto, [mockPermission]);
     expect(roleRepository.createEntity).not.toThrow();
     expect(result).toBe(undefined);
   });
@@ -117,9 +114,7 @@ describe('RolesService', () => {
       roleRepository.findOne.mockResolvedValue(mockRole);
       roleRepository.countEntityByCondition.mockResolvedValue(1);
       const updateRoleDto: UpdateRoleDto = mockRole;
-      await expect(service.update(1, updateRoleDto)).rejects.toThrowError(
-        UnprocessableEntityException
-      );
+      await expect(service.update(1, updateRoleDto)).rejects.toThrowError(UnprocessableEntityException);
       expect(roleRepository.countEntityByCondition).toHaveBeenCalledTimes(1);
     });
     it('update item that exists in database', async () => {
@@ -127,30 +122,20 @@ describe('RolesService', () => {
       roleRepository.findOne.mockResolvedValue(mockRole);
       roleRepository.countEntityByCondition.mockResolvedValue(0);
       roleRepository.get.mockResolvedValue(mockRole);
-      service.getPermissionByIds = jest
-        .fn()
-        .mockResolvedValue([mockPermission]);
+      service.getPermissionByIds = jest.fn().mockResolvedValue([mockPermission]);
       const updateRoleDto: UpdateRoleDto = mockRole;
       await service.update(1, updateRoleDto);
       expect(roleRepository.countEntityByCondition).toHaveBeenCalled();
       expect(service.getPermissionByIds).toHaveBeenCalledWith([1]);
-      expect(roleRepository.updateItem).toHaveBeenCalledWith(
-        mockRole,
-        updateRoleDto,
-        [mockPermission]
-      );
+      expect(roleRepository.updateItem).toHaveBeenCalledWith(mockRole, updateRoleDto, [mockPermission]);
     });
 
     it('trying to update item that does not exists in database', async () => {
-      service.getPermissionByIds = jest
-        .fn()
-        .mockResolvedValue([mockPermission]);
+      service.getPermissionByIds = jest.fn().mockResolvedValue([mockPermission]);
       roleRepository.countEntityByCondition.mockResolvedValue(0);
       roleRepository.findOne.mockResolvedValue(null);
       const updateRoleDto: UpdateRoleDto = mockRole;
-      await expect(service.update(1, updateRoleDto)).rejects.toThrowError(
-        NotFoundException
-      );
+      await expect(service.update(1, updateRoleDto)).rejects.toThrowError(NotFoundException);
     });
   });
 

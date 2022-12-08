@@ -1,5 +1,5 @@
-import { ConnectionOptions } from 'typeorm';
 import * as config from 'config';
+import { ConnectionOptions } from 'typeorm';
 
 const dbConfig = config.get('db');
 const ormConfig: ConnectionOptions = {
@@ -18,8 +18,8 @@ const ormConfig: ConnectionOptions = {
   migrationsTableName: 'migrations',
   migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
   cli: {
-    migrationsDir: 'src/database/migrations'
-  }
+    migrationsDir: 'src/database/migrations',
+  },
 };
 
 export = ormConfig;

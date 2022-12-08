@@ -1,19 +1,15 @@
-import { EntityRepository } from 'typeorm';
 import { classToPlain, plainToClass } from 'class-transformer';
-
+import { BaseRepository } from 'src/common/repository/base.repository';
+import { PermissionEntity } from 'src/permission/entities/permission.entity';
+import { CreateRoleDto } from 'src/role/dto/create-role.dto';
+import { UpdateRoleDto } from 'src/role/dto/update-role.dto';
 import { RoleEntity } from 'src/role/entities/role.entity';
 import { RoleSerializer } from 'src/role/serializer/role.serializer';
-import { BaseRepository } from 'src/common/repository/base.repository';
-import { CreateRoleDto } from 'src/role/dto/create-role.dto';
-import { PermissionEntity } from 'src/permission/entities/permission.entity';
-import { UpdateRoleDto } from 'src/role/dto/update-role.dto';
+import { EntityRepository } from 'typeorm';
 
 @EntityRepository(RoleEntity)
 export class RoleRepository extends BaseRepository<RoleEntity, RoleSerializer> {
-  async store(
-    createRoleDto: CreateRoleDto,
-    permissions: PermissionEntity[]
-  ): Promise<RoleSerializer> {
+  async store(createRoleDto: CreateRoleDto, permissions: PermissionEntity[]): Promise<RoleSerializer> {
     const { name, description } = createRoleDto;
     const role = this.create();
     role.name = name;
@@ -26,7 +22,7 @@ export class RoleRepository extends BaseRepository<RoleEntity, RoleSerializer> {
   async updateItem(
     role: RoleEntity,
     updateRoleDto: UpdateRoleDto,
-    permission: PermissionEntity[]
+    permission: PermissionEntity[],
   ): Promise<RoleSerializer> {
     const fields = ['name', 'description'];
     for (const field of fields) {
@@ -47,11 +43,7 @@ export class RoleRepository extends BaseRepository<RoleEntity, RoleSerializer> {
    * @param transformOption
    */
   transform(model: RoleEntity, transformOption = {}): RoleSerializer {
-    return plainToClass(
-      RoleSerializer,
-      classToPlain(model, transformOption),
-      transformOption
-    );
+    return plainToClass(RoleSerializer, classToPlain(model, transformOption), transformOption);
   }
 
   /**

@@ -1,5 +1,4 @@
 import * as request from 'supertest';
-
 import { AppFactory } from 'test/factories/app';
 
 describe('AppController (e2e)', () => {
@@ -15,10 +14,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    return request(app.instance.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect({ message: 'hello world' });
+    return request(app.instance.getHttpServer()).get('/').expect(200).expect({ message: 'hello world' });
   });
 
   afterAll(async () => {

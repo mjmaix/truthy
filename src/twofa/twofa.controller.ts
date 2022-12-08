@@ -8,10 +8,9 @@ import {
   Req,
   Res,
   UnauthorizedException,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-
 import { AuthService } from 'src/auth/auth.service';
 import { UserEntity } from 'src/auth/entity/user.entity';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
@@ -22,10 +21,7 @@ import { TwofaService } from 'src/twofa/twofa.service';
 
 @Controller('twofa')
 export class TwofaController {
-  constructor(
-    private readonly twofaService: TwofaService,
-    private readonly usersService: AuthService
-  ) {}
+  constructor(private readonly twofaService: TwofaService, private readonly usersService: AuthService) {}
 
   @Post('authenticate')
   @HttpCode(200)
@@ -38,12 +34,9 @@ export class TwofaController {
     @GetUser()
     user: UserEntity,
     @Body()
-    twofaCodeDto: TwofaCodeDto
+    twofaCodeDto: TwofaCodeDto,
   ) {
-    const isCodeValid = this.twofaService.isTwoFACodeValid(
-      twofaCodeDto.code,
-      user
-    );
+    const isCodeValid = this.twofaService.isTwoFACodeValid(twofaCodeDto.code, user);
     if (!isCodeValid) {
       throw new UnauthorizedException('invalidOTP');
     }
@@ -60,17 +53,13 @@ export class TwofaController {
     @Body()
     twofaStatusUpdateDto: TwoFaStatusUpdateDto,
     @GetUser()
-    user: UserEntity
+    user: UserEntity,
   ) {
     let qrDataUri = null;
     if (twofaStatusUpdateDto.isTwoFAEnabled) {
       const { otpauthUrl } = await this.twofaService.generateTwoFASecret(user);
       qrDataUri = await this.twofaService.qrDataToUrl(otpauthUrl);
     }
-    return this.usersService.turnOnTwoFactorAuthentication(
-      user,
-      twofaStatusUpdateDto.isTwoFAEnabled,
-      qrDataUri
-    );
+    return this.usersService.turnOnTwoFactorAuthentication(user, twofaStatusUpdateDto.isTwoFAEnabled, qrDataUri);
   }
 }

@@ -1,10 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import {
-  PermissionConfiguration,
-  RoutePayloadInterface
-} from 'src/config/permission-config';
 import { UserEntity } from 'src/auth/entity/user.entity';
+import { PermissionConfiguration, RoutePayloadInterface } from 'src/config/permission-config';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -12,15 +9,13 @@ export class PermissionGuard implements CanActivate {
    * check if user authorized
    * @param context
    */
-  canActivate(
-    context: ExecutionContext
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const path = request.route.path;
     const method = request.method.toLowerCase();
     const permissionPayload: RoutePayloadInterface = {
       path,
-      method
+      method,
     };
     const permitted = this.checkIfDefaultRoute(permissionPayload);
     if (permitted) {
@@ -36,9 +31,7 @@ export class PermissionGuard implements CanActivate {
   checkIfDefaultRoute(permissionAgainst: RoutePayloadInterface) {
     const { path, method } = permissionAgainst;
     const defaultRoutes = PermissionConfiguration.defaultRoutes;
-    return defaultRoutes.some(
-      (route) => route.path === path && route.method === method
-    );
+    return defaultRoutes.some((route) => route.path === path && route.method === method);
   }
 
   /**
@@ -46,15 +39,10 @@ export class PermissionGuard implements CanActivate {
    * @param user
    * @param permissionAgainst
    */
-  checkIfUserHavePermission(
-    user: UserEntity,
-    permissionAgainst: RoutePayloadInterface
-  ) {
+  checkIfUserHavePermission(user: UserEntity, permissionAgainst: RoutePayloadInterface) {
     const { path, method } = permissionAgainst;
     if (user && user.role && user.role.permission) {
-      return user.role.permission.some(
-        (route) => route.path === path && route.method === method
-      );
+      return user.role.permission.some((route) => route.path === path && route.method === method);
     }
     return false;
   }

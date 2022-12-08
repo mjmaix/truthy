@@ -2,29 +2,21 @@ import { HttpStatus } from '@nestjs/common';
 import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { StatusCodesList } from 'src/common/constants/status-codes-list.constants';
+import { CustomHttpException } from 'src/exception/custom-http.exception';
 import { v4 as uuid } from 'uuid';
 
-import { CustomHttpException } from 'src/exception/custom-http.exception';
-import { StatusCodesList } from 'src/common/constants/status-codes-list.constants';
-
-export const multerOptionsHelper = (
-  destinationPath: string,
-  maxFileSize: number
-) => ({
+export const multerOptionsHelper = (destinationPath: string, maxFileSize: number) => ({
   limits: {
-    fileSize: +maxFileSize
+    fileSize: +maxFileSize,
   },
   fileFilter: (req: any, file: any, cb: any) => {
     if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
       cb(null, true);
     } else {
       cb(
-        new CustomHttpException(
-          'unsupportedFileType',
-          HttpStatus.BAD_REQUEST,
-          StatusCodesList.UnsupportedFileType
-        ),
-        false
+        new CustomHttpException('unsupportedFileType', HttpStatus.BAD_REQUEST, StatusCodesList.UnsupportedFileType),
+        false,
       );
     }
   },
@@ -38,6 +30,6 @@ export const multerOptionsHelper = (
     },
     filename: (req: any, file: any, cb: any) => {
       cb(null, `${uuid()}${extname(file.originalname)}`);
-    }
-  })
+    },
+  }),
 });

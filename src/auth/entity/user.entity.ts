@@ -1,42 +1,32 @@
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  CreateDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  OneToOne
-} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
-
 import { UserStatusEnum } from 'src/auth/user-status.enum';
 import { CustomBaseEntity } from 'src/common/entity/custom-base.entity';
 import { RoleEntity } from 'src/role/entities/role.entity';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, Index, JoinColumn, OneToOne } from 'typeorm';
 
 /**
  * User Entity
  */
 @Entity({
-  name: 'user'
+  name: 'user',
 })
 export class UserEntity extends CustomBaseEntity {
   @Index({
-    unique: true
+    unique: true,
   })
   @Column()
   username: string;
 
   @Index({
-    unique: true
+    unique: true,
   })
   @Column()
   email: string;
 
   @Column()
   @Exclude({
-    toPlainOnly: true
+    toPlainOnly: true,
   })
   password: string;
 
@@ -58,46 +48,46 @@ export class UserEntity extends CustomBaseEntity {
 
   @Column()
   @Exclude({
-    toPlainOnly: true
+    toPlainOnly: true,
   })
   token: string;
 
   @CreateDateColumn({
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
+    default: () => 'CURRENT_TIMESTAMP',
   })
   tokenValidityDate: Date;
 
   @Column()
   @Exclude({
-    toPlainOnly: true
+    toPlainOnly: true,
   })
   salt: string;
 
   @Column({
-    nullable: true
+    nullable: true,
   })
   @Exclude({
-    toPlainOnly: true
+    toPlainOnly: true,
   })
   twoFASecret?: string;
 
   @Exclude({
-    toPlainOnly: true
+    toPlainOnly: true,
   })
   @CreateDateColumn({
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
+    default: () => 'CURRENT_TIMESTAMP',
   })
   twoFAThrottleTime?: Date;
 
   @Column({
-    default: false
+    default: false,
   })
   isTwoFAEnabled: boolean;
 
   @Exclude({
-    toPlainOnly: true
+    toPlainOnly: true,
   })
   skipHashPassword = false;
 

@@ -1,16 +1,15 @@
-import { Column, Entity, Index, JoinTable, ManyToMany, Unique } from 'typeorm';
-
 import { CustomBaseEntity } from 'src/common/entity/custom-base.entity';
 import { PermissionEntity } from 'src/permission/entities/permission.entity';
+import { Column, Entity, Index, JoinTable, ManyToMany, Unique } from 'typeorm';
 
 @Entity({
-  name: 'role'
+  name: 'role',
 })
 @Unique(['name'])
 export class RoleEntity extends CustomBaseEntity {
   @Column('varchar', { length: 100 })
   @Index({
-    unique: true
+    unique: true,
   })
   name: string;
 
@@ -22,12 +21,12 @@ export class RoleEntity extends CustomBaseEntity {
     name: 'role_permission',
     joinColumn: {
       name: 'roleId',
-      referencedColumnName: 'id'
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
       name: 'permissionId',
-      referencedColumnName: 'id'
-    }
+      referencedColumnName: 'id',
+    },
   })
   permission: PermissionEntity[];
 

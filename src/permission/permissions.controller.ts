@@ -9,18 +9,17 @@ import {
   Post,
   Put,
   Query,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-
-import { PermissionsService } from 'src/permission/permissions.service';
-import { CreatePermissionDto } from 'src/permission/dto/create-permission.dto';
-import { UpdatePermissionDto } from 'src/permission/dto/update-permission.dto';
-import { PermissionFilterDto } from 'src/permission/dto/permission-filter.dto';
-import { Permission } from 'src/permission/serializer/permission.serializer';
+import JwtTwoFactorGuard from 'src/common/guard/jwt-two-factor.guard';
 import { PermissionGuard } from 'src/common/guard/permission.guard';
 import { Pagination } from 'src/paginate';
-import JwtTwoFactorGuard from 'src/common/guard/jwt-two-factor.guard';
+import { CreatePermissionDto } from 'src/permission/dto/create-permission.dto';
+import { PermissionFilterDto } from 'src/permission/dto/permission-filter.dto';
+import { UpdatePermissionDto } from 'src/permission/dto/update-permission.dto';
+import { PermissionsService } from 'src/permission/permissions.service';
+import { Permission } from 'src/permission/serializer/permission.serializer';
 
 @ApiTags('permissions')
 @UseGuards(JwtTwoFactorGuard, PermissionGuard)
@@ -32,18 +31,18 @@ export class PermissionsController {
   @Post()
   create(
     @Body()
-    createPermissionDto: CreatePermissionDto
+    createPermissionDto: CreatePermissionDto,
   ): Promise<Permission> {
     return this.permissionsService.create(createPermissionDto);
   }
 
   @Get()
   @ApiQuery({
-    type: PermissionFilterDto
+    type: PermissionFilterDto,
   })
   findAll(
     @Query()
-    permissionFilterDto: PermissionFilterDto
+    permissionFilterDto: PermissionFilterDto,
   ): Promise<Pagination<Permission>> {
     return this.permissionsService.findAll(permissionFilterDto);
   }
@@ -51,7 +50,7 @@ export class PermissionsController {
   @Get(':id')
   findOne(
     @Param('id')
-    id: string
+    id: string,
   ): Promise<Permission> {
     return this.permissionsService.findOne(+id);
   }
@@ -61,7 +60,7 @@ export class PermissionsController {
     @Param('id')
     id: string,
     @Body()
-    updatePermissionDto: UpdatePermissionDto
+    updatePermissionDto: UpdatePermissionDto,
   ): Promise<Permission> {
     return this.permissionsService.update(+id, updatePermissionDto);
   }
@@ -70,7 +69,7 @@ export class PermissionsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(
     @Param('id')
-    id: string
+    id: string,
   ): Promise<void> {
     return this.permissionsService.remove(+id);
   }

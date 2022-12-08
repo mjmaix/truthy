@@ -1,12 +1,11 @@
 import { Test } from '@nestjs/testing';
-
-import { UserRepository } from 'src/auth/user.repository';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 import { UserLoginDto } from 'src/auth/dto/user-login.dto';
 import { UserEntity } from 'src/auth/entity/user.entity';
+import { UserRepository } from 'src/auth/user.repository';
 import { UserStatusEnum } from 'src/auth/user-status.enum';
-import { StatusCodesList } from 'src/common/constants/status-codes-list.constants';
 import { ExceptionTitleList } from 'src/common/constants/exception-title-list.constants';
+import { StatusCodesList } from 'src/common/constants/status-codes-list.constants';
 
 const mockUser = {
   roleId: 1,
@@ -14,13 +13,13 @@ const mockUser = {
   username: 'tester',
   name: 'test',
   status: UserStatusEnum.ACTIVE,
-  password: 'pwd'
+  password: 'pwd',
 };
 describe('User Repository', () => {
   let userRepository;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [UserRepository]
+      providers: [UserRepository],
     }).compile();
     userRepository = await module.get<UserRepository>(UserRepository);
   });
@@ -33,7 +32,7 @@ describe('User Repository', () => {
     });
     it('store new user', async () => {
       const createUserDto: CreateUserDto = {
-        ...mockUser
+        ...mockUser,
       };
       await expect(userRepository.store(createUserDto)).resolves.not.toThrow();
     });
@@ -50,7 +49,7 @@ describe('User Repository', () => {
       user.validatePassword = jest.fn();
       userLoginDto = {
         ...mockUser,
-        remember: true
+        remember: true,
       };
     });
     it('check if username and password matches and return user', async () => {
@@ -60,12 +59,12 @@ describe('User Repository', () => {
       expect(userRepository.findOne).toHaveBeenCalledWith({
         where: [
           {
-            username: userLoginDto.username
+            username: userLoginDto.username,
           },
           {
-            email: userLoginDto.username
-          }
-        ]
+            email: userLoginDto.username,
+          },
+        ],
       });
       expect(result).toEqual([user, null, null]);
     });
@@ -74,21 +73,13 @@ describe('User Repository', () => {
       userRepository.findOne.mockResolvedValue(user);
       user.validatePassword.mockResolvedValue(false);
       const result = await userRepository.login(userLoginDto);
-      expect(result).toEqual([
-        null,
-        ExceptionTitleList.InvalidCredentials,
-        StatusCodesList.InvalidCredentials
-      ]);
+      expect(result).toEqual([null, ExceptionTitleList.InvalidCredentials, StatusCodesList.InvalidCredentials]);
     });
 
     it('check if user is null', async () => {
       userRepository.findOne.mockResolvedValue(null);
       const result = await userRepository.login(userLoginDto);
-      expect(result).toEqual([
-        null,
-        ExceptionTitleList.InvalidCredentials,
-        StatusCodesList.InvalidCredentials
-      ]);
+      expect(result).toEqual([null, ExceptionTitleList.InvalidCredentials, StatusCodesList.InvalidCredentials]);
     });
   });
 });

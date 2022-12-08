@@ -13,41 +13,41 @@ export class RoleTable1614275766942 implements MigrationInterface {
             type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: 'increment'
+            generationStrategy: 'increment',
           },
           {
             name: 'name',
             type: 'varchar',
             isNullable: false,
             isUnique: true,
-            length: '100'
+            length: '100',
           },
           {
             name: 'description',
             type: 'text',
-            isNullable: true
+            isNullable: true,
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'now()'
+            default: 'now()',
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
-            default: 'now()'
-          }
-        ]
+            default: 'now()',
+          },
+        ],
       }),
-      false
+      false,
     );
 
     await queryRunner.createIndex(
       this.tableName,
       new TableIndex({
         name: `IDX_ROLE_NAME`,
-        columnNames: ['name']
-      })
+        columnNames: ['name'],
+      }),
     );
   }
 

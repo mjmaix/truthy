@@ -1,4 +1,4 @@
-import { IsLowercase, IsNotEmpty, IsBoolean } from 'class-validator';
+import { IsBoolean, IsLowercase, IsNotEmpty } from 'class-validator';
 
 /**
  * user login data transfer object

@@ -9,18 +9,17 @@ import {
   Post,
   Put,
   Query,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-
-import { EmailTemplateService } from 'src/email-template/email-template.service';
-import { CreateEmailTemplateDto } from 'src/email-template/dto/create-email-template.dto';
-import { UpdateEmailTemplateDto } from 'src/email-template/dto/update-email-template.dto';
-import { PermissionGuard } from 'src/common/guard/permission.guard';
-import { Pagination } from 'src/paginate';
-import { EmailTemplate } from 'src/email-template/serializer/email-template.serializer';
-import { EmailTemplatesSearchFilterDto } from 'src/email-template/dto/email-templates-search-filter.dto';
 import JwtTwoFactorGuard from 'src/common/guard/jwt-two-factor.guard';
+import { PermissionGuard } from 'src/common/guard/permission.guard';
+import { CreateEmailTemplateDto } from 'src/email-template/dto/create-email-template.dto';
+import { EmailTemplatesSearchFilterDto } from 'src/email-template/dto/email-templates-search-filter.dto';
+import { UpdateEmailTemplateDto } from 'src/email-template/dto/update-email-template.dto';
+import { EmailTemplateService } from 'src/email-template/email-template.service';
+import { EmailTemplate } from 'src/email-template/serializer/email-template.serializer';
+import { Pagination } from 'src/paginate';
 
 @ApiTags('email-templates')
 @UseGuards(JwtTwoFactorGuard, PermissionGuard)
@@ -31,7 +30,7 @@ export class EmailTemplateController {
   @Post()
   create(
     @Body()
-    createEmailTemplateDto: CreateEmailTemplateDto
+    createEmailTemplateDto: CreateEmailTemplateDto,
   ): Promise<EmailTemplate> {
     return this.emailTemplateService.create(createEmailTemplateDto);
   }
@@ -39,7 +38,7 @@ export class EmailTemplateController {
   @Get()
   findAll(
     @Query()
-    filter: EmailTemplatesSearchFilterDto
+    filter: EmailTemplatesSearchFilterDto,
   ): Promise<Pagination<EmailTemplate>> {
     return this.emailTemplateService.findAll(filter);
   }
@@ -47,7 +46,7 @@ export class EmailTemplateController {
   @Get(':id')
   findOne(
     @Param('id')
-    id: string
+    id: string,
   ): Promise<EmailTemplate> {
     return this.emailTemplateService.findOne(+id);
   }
@@ -57,7 +56,7 @@ export class EmailTemplateController {
     @Param('id')
     id: string,
     @Body()
-    updateEmailTemplateDto: UpdateEmailTemplateDto
+    updateEmailTemplateDto: UpdateEmailTemplateDto,
   ): Promise<EmailTemplate> {
     return this.emailTemplateService.update(+id, updateEmailTemplateDto);
   }
@@ -66,7 +65,7 @@ export class EmailTemplateController {
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(
     @Param('id')
-    id: string
+    id: string,
   ): Promise<void> {
     return this.emailTemplateService.remove(+id);
   }

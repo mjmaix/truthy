@@ -1,12 +1,7 @@
+import { ApiHideProperty, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
-import {
-  ApiHideProperty,
-  ApiProperty,
-  ApiPropertyOptional
-} from '@nestjs/swagger';
-
-import { ModelSerializer } from 'src/common/serializer/model.serializer';
 import { UserStatusEnum } from 'src/auth/user-status.enum';
+import { ModelSerializer } from 'src/common/serializer/model.serializer';
 import { RoleSerializer } from 'src/role/serializer/role.serializer';
 
 export const adminUserGroupsForSerializing: string[] = ['admin'];
@@ -18,7 +13,7 @@ export const defaultUserGroupsForSerializing: string[] = ['timestamps'];
  */
 export class UserSerializer extends ModelSerializer {
   @Expose({
-    groups: [...ownerUserGroupsForSerializing, ...adminUserGroupsForSerializing]
+    groups: [...ownerUserGroupsForSerializing, ...adminUserGroupsForSerializing],
   })
   id: number;
 
@@ -37,7 +32,7 @@ export class UserSerializer extends ModelSerializer {
 
   @ApiProperty()
   @Expose({
-    groups: ownerUserGroupsForSerializing
+    groups: ownerUserGroupsForSerializing,
   })
   isTwoFAEnabled: boolean;
 
@@ -51,36 +46,36 @@ export class UserSerializer extends ModelSerializer {
 
   @ApiPropertyOptional()
   @Expose({
-    groups: adminUserGroupsForSerializing
+    groups: adminUserGroupsForSerializing,
   })
   status: UserStatusEnum;
 
   @ApiHideProperty()
   @Expose({
-    groups: ownerUserGroupsForSerializing
+    groups: ownerUserGroupsForSerializing,
   })
   @Type(() => RoleSerializer)
   role: RoleSerializer;
 
   @Exclude({
-    toClassOnly: true
+    toClassOnly: true,
   })
   roleId: number;
 
   @Exclude({
-    toClassOnly: true
+    toClassOnly: true,
   })
   tokenValidityDate: Date;
 
   @ApiPropertyOptional()
   @Expose({
-    groups: defaultUserGroupsForSerializing
+    groups: defaultUserGroupsForSerializing,
   })
   createdAt: Date;
 
   @ApiPropertyOptional()
   @Expose({
-    groups: defaultUserGroupsForSerializing
+    groups: defaultUserGroupsForSerializing,
   })
   updatedAt: Date;
 }

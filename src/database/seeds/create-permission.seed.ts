@@ -1,14 +1,13 @@
-import { Factory } from 'typeorm-seeding';
-import { Connection } from 'typeorm';
-
 import {
   ModulesPayloadInterface,
   PermissionConfiguration,
   PermissionPayload,
   RoutePayloadInterface,
-  SubModulePayloadInterface
+  SubModulePayloadInterface,
 } from 'src/config/permission-config';
 import { PermissionEntity } from 'src/permission/entities/permission.entity';
+import { Connection } from 'typeorm';
+import { Factory } from 'typeorm-seeding';
 
 export default class CreatePermissionSeed {
   permissions: RoutePayloadInterface[] = [];
@@ -41,7 +40,7 @@ export default class CreatePermissionSeed {
   assignResourceAndConcatPermission(
     modules: ModulesPayloadInterface | SubModulePayloadInterface,
     resource: string,
-    isDefault?: false
+    isDefault?: false,
   ) {
     if (modules.permissions) {
       for (const permission of modules.permissions) {
@@ -50,11 +49,7 @@ export default class CreatePermissionSeed {
     }
   }
 
-  concatPermissions(
-    permission: PermissionPayload,
-    resource: string,
-    isDefault: boolean
-  ) {
+  concatPermissions(permission: PermissionPayload, resource: string, isDefault: boolean) {
     const description = permission.name;
     for (const data of permission.route) {
       data.resource = data.resource || resource;

@@ -1,13 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { authenticator } from 'otplib';
-
-import { TwofaService } from 'src/twofa/twofa.service';
 import { AuthService } from 'src/auth/auth.service';
 import { UserEntity } from 'src/auth/entity/user.entity';
 import { CustomHttpException } from 'src/exception/custom-http.exception';
+import { TwofaService } from 'src/twofa/twofa.service';
 
 const authServiceMock = () => ({
-  setTwoFactorAuthenticationSecret: jest.fn()
+  setTwoFactorAuthenticationSecret: jest.fn(),
 });
 
 describe('TwofaService', () => {
@@ -19,9 +18,9 @@ describe('TwofaService', () => {
         TwofaService,
         {
           provide: AuthService,
-          useFactory: authServiceMock
-        }
-      ]
+          useFactory: authServiceMock,
+        },
+      ],
     }).compile();
 
     service = module.get<TwofaService>(TwofaService);
@@ -42,9 +41,7 @@ describe('TwofaService', () => {
       const twoFAThrottleTime = new Date();
       twoFAThrottleTime.setSeconds(twoFAThrottleTime.getSeconds() + 60);
       user.twoFAThrottleTime = twoFAThrottleTime;
-      await expect(service.generateTwoFASecret(user)).rejects.toThrowError(
-        CustomHttpException
-      );
+      await expect(service.generateTwoFASecret(user)).rejects.toThrowError(CustomHttpException);
     });
     it('should generate 2fa secret', async () => {
       jest.spyOn(authenticator, 'generateSecret').mockReturnValue('result');
@@ -52,9 +49,7 @@ describe('TwofaService', () => {
       await service.generateTwoFASecret(user);
       expect(authenticator.generateSecret).toHaveBeenCalledTimes(1);
       expect(authenticator.keyuri).toHaveBeenCalledTimes(1);
-      expect(
-        authService.setTwoFactorAuthenticationSecret
-      ).toHaveBeenCalledTimes(1);
+      expect(authService.setTwoFactorAuthenticationSecret).toHaveBeenCalledTimes(1);
     });
   });
 

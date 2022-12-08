@@ -1,12 +1,11 @@
-import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
+import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import * as config from 'config';
-
-import { MailService } from 'src/mail/mail.service';
-import { MailProcessor } from 'src/mail/mail.processor';
 import { EmailTemplateModule } from 'src/email-template/email-template.module';
+import { MailProcessor } from 'src/mail/mail.processor';
+import { MailService } from 'src/mail/mail.service';
 
 const mailConfig = config.get('mail');
 const queueConfig = config.get('queue');
@@ -23,9 +22,9 @@ const queueConfig = config.get('queue');
           password: process.env.REDIS_PASSWORD || queueConfig.password,
           retryStrategy(times) {
             return Math.min(times * 50, 2000);
-          }
-        }
-      })
+          },
+        },
+      }),
     }),
     MailerModule.forRootAsync({
       useFactory: () => ({
@@ -36,27 +35,25 @@ const queueConfig = config.get('queue');
           ignoreTLS: mailConfig.ignoreTLS,
           auth: {
             user: process.env.MAIL_USER || mailConfig.user,
-            pass: process.env.MAIL_PASS || mailConfig.pass
-          }
+            pass: process.env.MAIL_PASS || mailConfig.pass,
+          },
         },
         defaults: {
-          from: `"${process.env.MAIL_FROM || mailConfig.from}" <${
-            process.env.MAIL_FROM || mailConfig.fromMail
-          }>`
+          from: `"${process.env.MAIL_FROM || mailConfig.from}" <${process.env.MAIL_FROM || mailConfig.fromMail}>`,
         },
         preview: mailConfig.preview,
         template: {
           dir: __dirname + '/templates/email/layouts/',
           adapter: new PugAdapter(),
           options: {
-            strict: true
-          }
-        }
-      })
-    })
+            strict: true,
+          },
+        },
+      }),
+    }),
   ],
   controllers: [],
   providers: [MailService, MailProcessor],
-  exports: [MailService]
+  exports: [MailService],
 })
 export class MailModule {}

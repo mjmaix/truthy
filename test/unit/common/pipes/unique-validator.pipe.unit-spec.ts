@@ -1,15 +1,14 @@
 import { Test } from '@nestjs/testing';
 import { getConnectionToken } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
-
-import { UniqueValidatorPipe } from 'src/common/pipes/unique-validator.pipe';
 import { UserEntity } from 'src/auth/entity/user.entity';
 import { UniqueValidationArguments } from 'src/common/pipes/abstract-unique-validator';
+import { UniqueValidatorPipe } from 'src/common/pipes/unique-validator.pipe';
+import { Connection } from 'typeorm';
 
 const mockConnection = () => ({
   getRepository: jest.fn(() => ({
-    count: jest.fn().mockResolvedValue(0)
-  }))
+    count: jest.fn().mockResolvedValue(0),
+  })),
 });
 
 describe('UniqueValidatorPipe', () => {
@@ -20,9 +19,9 @@ describe('UniqueValidatorPipe', () => {
         UniqueValidatorPipe,
         {
           provide: getConnectionToken(),
-          useFactory: mockConnection
-        }
-      ]
+          useFactory: mockConnection,
+        },
+      ],
     }).compile();
     isUnique = await module.get<UniqueValidatorPipe>(UniqueValidatorPipe);
     connection = await module.get<Connection>(Connection);
@@ -36,9 +35,9 @@ describe('UniqueValidatorPipe', () => {
         value: username,
         targetName: '',
         object: {
-          username
+          username,
         },
-        property: 'username'
+        property: 'username',
       };
       const result = await isUnique.validate<UserEntity>('username', args);
       expect(connection.getRepository).toHaveBeenCalledWith(UserEntity);

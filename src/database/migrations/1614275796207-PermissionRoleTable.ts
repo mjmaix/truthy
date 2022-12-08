@@ -1,23 +1,17 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableColumn,
-  TableForeignKey
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from 'typeorm';
 
 export class PermissionRoleTable1614275796207 implements MigrationInterface {
   foreignKeysArray = [
     {
       table: 'role',
       field: 'roleId',
-      reference: 'id'
+      reference: 'id',
     },
     {
       table: 'permission',
       field: 'permissionId',
-      reference: 'id'
-    }
+      reference: 'id',
+    },
   ];
   tableName = 'role_permission';
 
@@ -33,17 +27,17 @@ export class PermissionRoleTable1614275796207 implements MigrationInterface {
           //   isGenerated: true,
           //   generationStrategy: 'increment'
           // }
-        ]
+        ],
       }),
-      false
+      false,
     );
     for (const foreignKey of this.foreignKeysArray) {
       await queryRunner.addColumn(
         this.tableName,
         new TableColumn({
           name: foreignKey.field,
-          type: 'int'
-        })
+          type: 'int',
+        }),
       );
 
       await queryRunner.createForeignKey(
@@ -52,8 +46,8 @@ export class PermissionRoleTable1614275796207 implements MigrationInterface {
           columnNames: [foreignKey.field],
           referencedColumnNames: [foreignKey.reference],
           referencedTableName: foreignKey.table,
-          onDelete: 'CASCADE'
-        })
+          onDelete: 'CASCADE',
+        }),
       );
     }
   }
@@ -61,9 +55,7 @@ export class PermissionRoleTable1614275796207 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     const table = await queryRunner.getTable(this.tableName);
     for (const key of this.foreignKeysArray) {
-      const foreignKey = table.foreignKeys.find(
-        (fk) => fk.columnNames.indexOf(key.field) !== -1
-      );
+      const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf(key.field) !== -1);
       await queryRunner.dropForeignKey(this.tableName, foreignKey);
       await queryRunner.dropColumn(this.tableName, key.field);
     }

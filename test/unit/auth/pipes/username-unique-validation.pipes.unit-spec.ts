@@ -1,10 +1,9 @@
 import { Test } from '@nestjs/testing';
-
 import { AuthService } from 'src/auth/auth.service';
 import { IsUsernameAlreadyExist } from 'src/auth/pipes/username-unique-validation.pipes';
 
 const mockAuthService = () => ({
-  findBy: jest.fn()
+  findBy: jest.fn(),
 });
 describe('IsUsernameAlreadyExist', () => {
   let authService: AuthService, isUsernameAlreadyExist: IsUsernameAlreadyExist;
@@ -14,13 +13,11 @@ describe('IsUsernameAlreadyExist', () => {
         IsUsernameAlreadyExist,
         {
           provide: AuthService,
-          useFactory: mockAuthService
-        }
-      ]
+          useFactory: mockAuthService,
+        },
+      ],
     }).compile();
-    isUsernameAlreadyExist = await module.get<IsUsernameAlreadyExist>(
-      IsUsernameAlreadyExist
-    );
+    isUsernameAlreadyExist = await module.get<IsUsernameAlreadyExist>(IsUsernameAlreadyExist);
     authService = await module.get<AuthService>(AuthService);
   });
 

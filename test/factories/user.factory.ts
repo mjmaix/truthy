@@ -1,10 +1,9 @@
-import { getRepository } from 'typeorm';
 import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
-
 import { UserEntity } from 'src/auth/entity/user.entity';
 import { UserStatusEnum } from 'src/auth/user-status.enum';
 import { RoleEntity } from 'src/role/entities/role.entity';
+import { getRepository } from 'typeorm';
 
 export class UserFactory {
   private role: RoleEntity;
@@ -21,10 +20,7 @@ export class UserFactory {
   async create(user: Partial<UserEntity> = {}) {
     const userRepository = getRepository(UserEntity);
     const salt = await bcrypt.genSalt();
-    const password = await this.hashPassword(
-      user.password || faker.internet.password(),
-      salt
-    );
+    const password = await this.hashPassword(user.password || faker.internet.password(), salt);
     const payload = {
       username: faker.internet.userName().toLowerCase(),
       email: faker.internet.email().toLowerCase(),
@@ -37,7 +33,7 @@ export class UserFactory {
       status: UserStatusEnum.ACTIVE,
       isTwoFAEnabled: false,
       ...user,
-      password
+      password,
     };
 
     if (this.role) payload.role = this.role;
