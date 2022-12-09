@@ -1,7 +1,6 @@
 import { HttpStatus, Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as config from 'config';
 import { existsSync, unlinkSync } from 'fs';
 import { SignOptions } from 'jsonwebtoken';
 import { RateLimiterRes, RateLimiterStoreAbstract } from 'rate-limiter-flexible';
@@ -22,6 +21,7 @@ import { UserStatusEnum } from 'src/auth/user-status.enum';
 import { ExceptionTitleList } from 'src/common/constants/exception-title-list.constants';
 import { StatusCodesList } from 'src/common/constants/status-codes-list.constants';
 import { ValidationPayloadInterface } from 'src/common/interfaces/validation-error.interface';
+import config from 'src/config';
 import { CustomHttpException } from 'src/exception/custom-http.exception';
 import { ForbiddenException } from 'src/exception/forbidden.exception';
 import { NotFoundException } from 'src/exception/not-found.exception';
@@ -35,7 +35,7 @@ import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
 import { RefreshTokenSerializer } from 'src/refresh-token/serializer/refresh-token.serializer';
 import { DeepPartial, Not, ObjectLiteral } from 'typeorm';
 
-const throttleConfig = config.get('throttle.login');
+const throttleConfig = config.get('throttle');
 const jwtConfig = config.get('jwt');
 const appConfig = config.get('app');
 // const isSameSite = process.env.IS_SAME_SITE || appConfig.sameSite;
@@ -123,7 +123,7 @@ export class AuthService {
     const resUsernameAndIP = await this.rateLimiter.get(usernameIPkey);
     let retrySecs = 0;
     // Check if user is already blocked
-    if (resUsernameAndIP !== null && resUsernameAndIP.consumedPoints > throttleConfig.limit) {
+    if (resUsernameAndIP !== null && resUsernameAndIP.consumedPoints > throttleConfig.global.limit) {
       retrySecs = Math.round(resUsernameAndIP.msBeforeNext / 1000) || 1;
     }
     if (retrySecs > 0) {

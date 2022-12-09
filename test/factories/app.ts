@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { ThrottlerModule } from '@nestjs/throttler';
-import * as config from 'config';
 import * as Redis from 'ioredis';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 import { AppModule } from 'src/app.module';
+import config from 'src/config';
 import { createConnection, getConnection } from 'typeorm';
 
 const dbConfig = config.get('db');
@@ -75,11 +75,11 @@ export class AppFactory {
   static async dropTables() {
     const connection = await createConnection({
       type: dbConfig.type || 'postgres',
-      host: process.env.DB_HOST || dbConfig.host,
-      port: parseInt(process.env.DB_PORT) || dbConfig.port,
-      database: process.env.DB_DATABASE_NAME || dbConfig.database,
-      username: process.env.DB_USERNAME || dbConfig.username,
-      password: process.env.DB_PASSWORD || dbConfig.password,
+      host: dbConfig.host,
+      port: dbConfig.port,
+      database: dbConfig.database,
+      username: dbConfig.username,
+      password: dbConfig.password,
     });
 
     await connection.query(`SET session_replication_role = 'replica';`);

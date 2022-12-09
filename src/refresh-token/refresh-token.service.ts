@@ -1,12 +1,12 @@
 import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as config from 'config';
 import { SignOptions, TokenExpiredError } from 'jsonwebtoken';
 import { AuthService } from 'src/auth/auth.service';
 import { UserSerializer } from 'src/auth/serializer/user.serializer';
 import { ExceptionTitleList } from 'src/common/constants/exception-title-list.constants';
 import { StatusCodesList } from 'src/common/constants/status-codes-list.constants';
+import config from 'src/config';
 import { CustomHttpException } from 'src/exception/custom-http.exception';
 import { ForbiddenException } from 'src/exception/forbidden.exception';
 import { NotFoundException } from 'src/exception/not-found.exception';

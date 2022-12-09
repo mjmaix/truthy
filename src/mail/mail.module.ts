@@ -2,24 +2,24 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
-import * as config from 'config';
+import config from 'src/config';
 import { EmailTemplateModule } from 'src/email-template/email-template.module';
 import { MailProcessor } from 'src/mail/mail.processor';
 import { MailService } from 'src/mail/mail.service';
 
 const mailConfig = config.get('mail');
-const queueConfig = config.get('queue');
+const redisConfig = config.get('redis');
 
 @Module({
   imports: [
     EmailTemplateModule,
     BullModule.registerQueueAsync({
-      name: config.get('mail.queueName'),
+      name: mailConfig.queueName,
       useFactory: () => ({
         redis: {
-          host: process.env.REDIS_HOST || queueConfig.host,
-          port: process.env.REDIS_PORT || queueConfig.port,
-          password: process.env.REDIS_PASSWORD || queueConfig.password,
+          host: redisConfig.host,
+          port: redisConfig.port,
+          password: redisConfig.password,
           retryStrategy(times) {
             return Math.min(times * 50, 2000);
           },

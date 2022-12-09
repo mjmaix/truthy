@@ -1,11 +1,11 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import * as config from 'config';
 import { Response } from 'express';
 import { authenticator } from 'otplib';
 import { toDataURL, toFileStream } from 'qrcode';
 import { AuthService } from 'src/auth/auth.service';
 import { UserEntity } from 'src/auth/entity/user.entity';
 import { StatusCodesList } from 'src/common/constants/status-codes-list.constants';
+import config from 'src/config';
 import { CustomHttpException } from 'src/exception/custom-http.exception';
 
 const TwofaConfig = config.get('twofa');

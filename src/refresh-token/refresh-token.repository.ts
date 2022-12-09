@@ -1,6 +1,6 @@
-import * as config from 'config';
 import { UserSerializer } from 'src/auth/serializer/user.serializer';
 import { BaseRepository } from 'src/common/repository/base.repository';
+import config from 'src/config';
 import { RefreshToken } from 'src/refresh-token/entities/refresh-token.entity';
 import { RefreshTokenSerializer } from 'src/refresh-token/serializer/refresh-token.serializer';
 import { EntityRepository } from 'typeorm';

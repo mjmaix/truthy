@@ -2,11 +2,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
-import * as config from 'config';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from 'src/app.module';
+
+import config from './config';
 
 async function bootstrap() {
   const serverConfig = config.get('server');
@@ -37,7 +38,7 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup('api-docs', app, document, customOptions);
   } else {
-    const whitelist = [apiConfig.get<string>('frontendUrl')];
+    const whitelist = [apiConfig.frontendUrl];
     app.enableCors({
       origin: function (origin, callback) {
         if (!origin || whitelist.indexOf(origin) !== -1) {

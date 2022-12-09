@@ -2,10 +2,10 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Job } from 'bull';
-import * as config from 'config';
+import config from 'src/config';
 import { MailJobInterface } from 'src/mail/interface/mail-job.interface';
 
-@Processor(config.get('mail.queueName'))
+@Processor(config.get('mail').queueName)
 export class MailProcessor {
   private readonly logger = new Logger(this.constructor.name);
 
