@@ -33,17 +33,32 @@
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Getting Started](#getting-started)
-- [Prerequisites](#Prerequisites)
+- [Prerequisites](#prerequisites)
 - [Available Scripts](#available-scripts)
+  - [npx truthy-api](#npx-truthy-api)
+  - [`yarn start:dev`](#yarn-startdev)
+  - [`yarn build`](#yarn-build)
+  - [`yarn lint`](#yarn-lint)
+  - [`yarn format`](#yarn-format)
+  - [`yarn format`](#yarn-format-1)
+  - [`yarn coverage`](#yarn-coverage)
+  - [`yarn orm-create migration_file_name`](#yarn-orm-create-migration_file_name)
+  - [`yarn migrate`](#yarn-migrate)
+  - [`yarn migration:rollback`](#yarn-migrationrollback)
+  - [`yarn seed`](#yarn-seed)
 - [Setup](#setup)
 - [Docker Setup](#docker-setup)
 - [File Structure](#file-structure)
 - [Application Security](#application-security)
+  - [Throttle](#throttle)
+  - [Two Factor Authentication (2FA)](#two-factor-authentication-2fa)
 - [Contributing](#contributing)
 - [Sponsors](#sponsors)
 - [License](#license)
 - [Acknowledgement](#acknowledgement)
+- [additional notes mjmaix/truthy](#additional-notes-mjmaixtruthy)
 
 ---
 
@@ -103,6 +118,7 @@ Formats all the files inside src using prettier with config provided in .prettie
 ### `yarn coverage`
 
 Runs coverage test command and creates coverage folder with detail report which can be checked with:
+
 ```bash
 yarn coveralls
 ```
@@ -138,28 +154,34 @@ or clone it using
 ```bash
 git clone https://github.com/gobeam/truthy.git
 ```
+
 **You also need to run PostgresQL for database and Redis for key-val storage which will be used for queue and throttling.**
 After cloning the make changes in configuration file that exists in config folder which exists in root of project.
-File names are named in accordance with environment you run project with. For example if you're running project in development environment you should make change in configuration of development.yml file. 
+File names are named in accordance with environment you run project with. For example if you're running project in development environment you should make change in configuration of development.yml file.
 **Please keep in mind environment variables always overrides the config.**
 
 If you want to run locally,
+
 ```bash
 yarn start
 ```
-*If you want to view swagger docs on development open http://localhost:7777/api-docs (assuming you are running application on 7777 port)*
+
+_If you want to view swagger docs on development open http://localhost:7777/api-docs (assuming you are running application on 7777 port)_
 
 Run Migration
+
 ```bash
 yarn migrate
 ```
 
 Run Seeders
+
 ```bash
 yarn seed
 ```
 
 Rollback Migration
+
 ```bash
 yarn migration:rollback
 ```
@@ -183,20 +205,24 @@ REDIS_PORT=6399
 ```
 
 After creating env file make changes in configuration in accordance with you development environment. Follow setup guide in case you missed it.
- 
+
 Now to run containers do
+
 ```bash
 docker-compose build .
 docker-compose up -d
 ```
+
 These commands will run 3 containers for PostgresQL, Redis and Main API.
 
 To run migration on docker container
+
 ```bash
 docker exec -it <container_id_or_name> yarn migrate
 ```
 
 To run seeder on docker container
+
 ```bash
 docker exec -it <container_id_or_name> yarn seed
 ```
@@ -213,11 +239,11 @@ truthy
 │   └── default.yml                         * Default configuration file.
 │   └── development.yml                     * Configuration file for development environment.
 │   └── production.yml                      * Configuration file for production environment.
-│   └── test.yml                            * Configuration file for test environment.    
-├── coverage                                * Coverage reports after running `yarn coverage` command. 
+│   └── test.yml                            * Configuration file for test environment.
+├── coverage                                * Coverage reports after running `yarn coverage` command.
 ├── dist                                    * Optimized code for production after `yarn build` is run.
 ├── images                                  * this folder is where uploaded profile images are stored. This folder is git ignored.
-├── src                  
+├── src
 │   └── <module>                            * Folder where specific modules all files are stored
 │       └── dto                             * Data Transfer Objects.
 │       └── entity                          * Models for module.
@@ -237,7 +263,7 @@ truthy
 │   └── exception                           * Exception folder includes custom exceptions.
 │   └── app.module.ts                       * Root module of the application.
 │   └── main.ts                             * The entry file of the application which uses the core function NestFactory to create a Nest application instance.
-├── test                                    * Contains E2E tests 
+├── test                                    * Contains E2E tests
 ```
 
 **Some important root files**
@@ -277,6 +303,7 @@ Please make sure to update tests as appropriate. - see `CONTRIBUTING.md` for det
 ---
 
 ## Sponsors
+
 - [Ekbana Solutions Pvt. Ltd](https://ekbana.com/)
 
 ---
@@ -290,3 +317,7 @@ Released under the MIT License - see `LICENSE.md` for details.
 ## Acknowledgement
 
 - [NestJS](https://github.com/nestjs/nest)
+
+## additional notes mjmaix/truthy
+
+1. must create .env.${process.env.NODE_ENV} file on the `config` folder

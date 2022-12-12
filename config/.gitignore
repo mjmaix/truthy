@@ -1,5 +1,4 @@
 
 # configs
-local.ts
-test.ts
 .env.test
+.env.local
